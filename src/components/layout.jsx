@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Single from "./pages/Single";
-import { Navbar } from "./components/Navbar";
+import Home from "../pages/Home";
+import Single from "../pages/Single";
+import { Navbar } from "./Navbar";
 
 const Layout = () => {
   return (

@@ -1,37 +1,181 @@
-// Import necessary hooks and components from react-router-dom and other libraries.
-import { Link, useParams } from "react-router-dom";  // To use link for navigation and useParams to get URL parameters
-import PropTypes from "prop-types";  // To define prop types for this component
-import rigoImageUrl from "../assets/img/rigo-baby.jpg"  // Import an image asset
-import useGlobalReducer from "../hooks/useGlobalReducer";  // Import a custom hook for accessing the global state
+import { useParams, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../appContext";
 
-// Define and export the Single component which displays individual item details.
-export const Single = props => {
-  // Access the global state using the custom hook.
-  const { store } = useGlobalReducer()
+const Single = () => {
+  const { name } = useParams();
+  const navigate = useNavigate();
+  const { favorites, addFavorite, removeFavorite } = useContext(Context);
 
-  // Retrieve the 'theId' URL parameter using useParams hook.
-  const { theId } = useParams()
-  const singleTodo = store.todos.find(todo => todo.id === parseInt(theId));
+  const decodedName = decodeURIComponent(name);
+  const isFavorite = favorites.includes(decodedName);
+
+
+  const normalize = (text) =>
+    text
+      .toLowerCase()
+      .replace(/[-\s]/g, "") // quita espacios y guiones
+      .replace(/[^a-z0-9]/g, ""); // limpia todo lo demás
+
+ 
+  const images = {
+    
+    lukeskywalker: "/luke.webp",
+    darthvader: "/Darth Vader.jpg",
+    leiaorgana: "/Leia Organa.jpg",
+    obiwankenobi: "/Obi Wan Kenobi.jpg",
+    r2d2: "/R2-D2.jpg",
+    c3po: "/C-3PO.jpg",
+    owenlars: "/Owen Lars.jpg",
+    beruwhitesunlars: "/Beru Whitesun lars.jpg",
+    biggsdarklighter: "/Biggs Darklighter.jpg",
+
+    
+    sandcrawler: "/sandcrawler.jpg",
+    snowspeeder: "/Snowspeeder.jpg",
+    atst: "/AT-ST.jpg",
+    sailbarge: "/Sail barge.jpg",
+    stormivtwinpodcloudcar: "/Storm IV Twin-Pod cloud car.jpg",
+    t16skyhopper: "/T-16 skyhopper.jpg",
+    tiebomber: "/TIE bomber.jpg",
+    tielnstrafighter: "/TIE-LN starfighter.jpg",
+    x34landspeeder: "/X-34 landspeeder.jpg",
+
+  
+    tatooine: "/tatooine.webp",
+    naboo: "/naboo.jpg",
+    hoth: "/hoth.jpg",
+    coruscant: "/coruscant.jpg",
+    dagobah: "/dagobah.jpg",
+    endor: "/endor.jpg",
+    bespin: "/bespin.jpg",
+    kamino: "/kamino.jpg",
+    yaviniv: "/yaviniv.jpg",
+    alderaan: "/alderaan.jpg",
+  };
+
+  const image = images[normalize(decodedName)] || "/default.webp";
+
+  
+  const bio = {
+    // PERSONAJES
+    "Luke Skywalker":
+      "Un joven granjero que se convirtió en uno de los Jedi más poderosos de la galaxia.",
+    "Darth Vader":
+      "Antiguo Jedi que cayó al lado oscuro y sirvió al Emperador.",
+    "Leia Organa":
+      "Princesa y líder rebelde clave en la lucha contra el Imperio.",
+    "Obi-Wan Kenobi":
+      "Maestro Jedi sabio y mentor de Anakin y Luke.",
+    "R2-D2":
+      "Droide valiente que ha salvado la galaxia en múltiples ocasiones.",
+    "C-3PO":
+      "Droide de protocolo experto en comunicación.",
+    "Owen Lars":
+      "Granjero de Tatooine y tío adoptivo de Luke.",
+    "Beru Whitesun Lars":
+      "Tía de Luke, amable y protectora.",
+    "Biggs Darklighter":
+      "Piloto rebelde y amigo de la infancia de Luke.",
+
+    
+    "Sand Crawler":
+      "Vehículo gigante de los Jawas usado para recolectar chatarra.",
+    "Snowspeeder":
+      "Vehículo rebelde usado en climas extremos como Hoth.",
+    "AT-ST":
+      "Caminante imperial ligero usado en combate terrestre.",
+    "Sail barge":
+      "Nave de transporte de Jabba el Hutt.",
+    "Storm IV Twin-Pod cloud car":
+      "Vehículo de patrulla aérea en Bespin.",
+    "T-16 skyhopper":
+      "Vehículo aéreo usado para entrenamiento en Tatooine.",
+    "TIE bomber":
+      "Nave imperial diseñada para bombardeos.",
+    "TIE-LN starfighter":
+      "Caza imperial rápido y ágil.",
+    "X-34 landspeeder":
+      "Vehículo terrestre usado por Luke en Tatooine.",
+
+    
+    "Tatooine":
+      "Planeta desértico de dos soles, hogar de Luke.",
+    "Naboo":
+      "Planeta pacífico con paisajes hermosos.",
+    "Hoth":
+      "Planeta helado donde la Rebelión tuvo una base.",
+    "Coruscant":
+      "Centro político de la galaxia.",
+    "Dagobah":
+      "Planeta pantanoso donde Yoda vivió.",
+    "Endor":
+      "Hogar de los Ewoks.",
+    "Bespin":
+      "Planeta gaseoso donde se encuentra Ciudad Nube.",
+    "Kamino":
+      "Planeta oceánico donde se creó el ejército clon.",
+    "Yavin IV":
+      "Base rebelde ubicada en una luna selvática.",
+    "Alderaan":
+      "Planeta natal de Leia destruido por la Estrella de la Muerte.",
+  };
 
   return (
-    <div className="container text-center">
-      {/* Display the title of the todo element dynamically retrieved from the store using theId. */}
-      <h1 className="display-4">Todo: {singleTodo?.title}</h1>
-      <hr className="my-4" />  {/* A horizontal rule for visual separation. */}
+    <div className="container mt-5 starwars-bg">
 
-      {/* A Link component acts as an anchor tag but is used for client-side routing to prevent page reloads. */}
-      <Link to="/">
-        <span className="btn btn-primary btn-lg" href="#" role="button">
-          Back home
-        </span>
-      </Link>
+      
+      <button className="btn btn-back mb-4" onClick={() => navigate(-1)}>
+        ← Volver
+      </button>
+
+      <div className="row">
+
+        
+        <div className="col-md-5">
+          <img
+            src={image}
+            alt={decodedName}
+            className="img-fluid starwars-img"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/default.webp";
+            }}
+          />
+        </div>
+
+        
+        <div className="col-md-7 d-flex flex-column justify-content-center">
+
+          <h1 className="starwars-title">{decodedName}</h1>
+
+          <button
+            className="btn btn-starwars mb-3"
+            onClick={() =>
+              isFavorite
+                ? removeFavorite(decodedName)
+                : addFavorite(decodedName)
+            }
+          >
+            {isFavorite ? "★ Quitar de favoritos" : "☆ Añadir a favoritos"}
+          </button>
+
+          <p className="starwars-text">
+            {bio[decodedName] ||
+              "Este elemento forma parte del universo de Star Wars."}
+          </p>
+
+          <hr />
+
+          <h5 className="starwars-title">Detalles</h5>
+          <p className="starwars-text">
+            Este personaje, planeta o vehículo ha tenido un impacto importante en la galaxia.
+          </p>
+
+        </div>
+      </div>
     </div>
   );
 };
 
-// Use PropTypes to validate the props passed to this component, ensuring reliable behavior.
-Single.propTypes = {
-  // Although 'match' prop is defined here, it is not used in the component.
-  // Consider removing or using it as needed.
-  match: PropTypes.object
-};
+export default Single;

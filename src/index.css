@@ -1,0 +1,62 @@
+
+body {
+  background: black;
+  background-image: radial-gradient(white 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: white;
+}
+
+.starwars-bg {
+  background: radial-gradient(circle at top, #111 0%, #000 100%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(255, 232, 31, 0.2);
+}
+
+.starwars-title {
+  color: #ffe81f;
+  text-shadow: 0 0 10px #ffe81f, 0 0 20px #ffe81f;
+}
+
+
+.starwars-text {
+  color: #ccc;
+  font-size: 1.1rem;
+}
+
+
+.btn-starwars {
+  background: linear-gradient(45deg, #ffe81f, #ffd700);
+  border: none;
+  color: black;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-starwars:hover {
+  box-shadow: 0 0 15px #ffe81f;
+  transform: scale(1.05);
+}
+
+
+.btn-back {
+  background-color: transparent;
+  border: 1px solid #ffe81f;
+  color: #ffe81f;
+}
+
+.btn-back:hover {
+  background-color: #ffe81f;
+  color: black;
+}
+
+
+.starwars-img {
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(255, 232, 31, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.starwars-img:hover {
+  transform: scale(1.03);
+}

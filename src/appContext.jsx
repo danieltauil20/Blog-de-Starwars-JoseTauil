@@ -1,58 +1,81 @@
 import { createContext, useState, useEffect } from "react";
 
-export const Context = createContext(null);
+export const Context = createContext();
 
-export const ContextProvider = ({ children }) => {
+const ContextProvider = ({ children }) => {
+  const [people, setPeople] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
+  const [planets, setPlanets] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
-    const [people, setPeople] = useState([]);
-    const [vehicles, setVehicles] = useState([]);
-    const [planets, setPlanets] = useState([]);
-    const [favorites, setFavorites] = useState([]);
+  // 🔥 FETCH CON MEJOR CONTROL
+  const fetchData = async () => {
+    try {
+      const [peopleRes, vehiclesRes, planetsRes] = await Promise.all([
+        fetch("https://www.swapi.tech/api/people"),
+        fetch("https://www.swapi.tech/api/vehicles"),
+        fetch("https://www.swapi.tech/api/planets"),
+      ]);
 
-    const getPeople = async () => {
-        const res = await fetch("https://www.swapi.tech/api/people");
-        const data = await res.json();
-        setPeople(data.results);
-    };
+      const [peopleData, vehiclesData, planetsData] = await Promise.all([
+        peopleRes.json(),
+        vehiclesRes.json(),
+        planetsRes.json(),
+      ]);
 
-    const getVehicles = async () => {
-        const res = await fetch("https://www.swapi.tech/api/vehicles");
-        const data = await res.json();
-        setVehicles(data.results);
-    };
+      setPeople(peopleData.results || []);
+      setVehicles(vehiclesData.results || []);
+      setPlanets(planetsData.results || []);
+    } catch (error) {
+      console.error("Error cargando datos:", error);
+    }
+  };
 
-    const getPlanets = async () => {
-        const res = await fetch("https://www.swapi.tech/api/planets");
-        const data = await res.json();
-        setPlanets(data.results);
-    };
+  useEffect(() => {
+    fetchData();
 
-    const addFavorite = (item) => {
-        if (!favorites.includes(item)) {
-            setFavorites([...favorites, item]);
-        }
-    };
+    const saved = JSON.parse(localStorage.getItem("favorites")) || [];
+    setFavorites(saved);
+  }, []);
 
-    const removeFavorite = (item) => {
-        setFavorites(favorites.filter(f => f !== item));
-    };
+  // ⭐ AÑADIR FAVORITO
+const addFavorite = (name) => {
+  setFavorites((prev) => {
+    if (prev.includes(name)) return [...prev];
 
-    useEffect(() => {
-        getPeople();
-        getVehicles();
-        getPlanets();
-    }, []);
-
-    return (
-        <Context.Provider value={{
-            people,
-            vehicles,
-            planets,
-            favorites,
-            addFavorite,
-            removeFavorite
-        }}>
-            {children}
-        </Context.Provider>
-    );
+    const updated = [...prev, name];
+    localStorage.setItem("favorites", JSON.stringify(updated));
+    return updated;
+  });
 };
+
+
+const removeFavorite = (name) => {
+  setFavorites((prev) => {
+    const updated = prev.filter((fav) => fav !== name);
+    localStorage.setItem("favorites", JSON.stringify(updated));
+    return updated;
+  });
+};
+
+  
+  const isFavorite = (name) => favorites.includes(name);
+
+  return (
+    <Context.Provider
+      value={{
+        people,
+        vehicles,
+        planets,
+        favorites,
+        addFavorite,
+        removeFavorite,
+        isFavorite, // 👈 útil para tus componentes
+      }}
+    >
+      {children}
+    </Context.Provider>
+  );
+};
+
+export default ContextProvider;
