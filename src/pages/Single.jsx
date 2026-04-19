@@ -19,7 +19,9 @@ const Single = () => {
   console.log(normalize(decodedName));
 
  
-  const isFavorite = favorites.includes(decodedName);
+  const isFavorite = favorites.some(
+  (fav) => normalize(fav) === normalize(decodedName)
+);
 
   const images = {
     lukeskywalker: "/luke.webp",

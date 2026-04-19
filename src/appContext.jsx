@@ -8,14 +8,6 @@ const ContextProvider = ({ children }) => {
   const [planets, setPlanets] = useState([]);
   const [favorites, setFavorites] = useState([]);
 
-  
-  const normalize = (text) =>
-    text
-      .toLowerCase()
-      .replace(/[-\s]/g, "")
-      .replace(/[^a-z0-9]/g, "");
-
-  
   const fetchData = async () => {
     try {
       const [peopleRes, vehiclesRes, planetsRes] = await Promise.all([
@@ -45,9 +37,19 @@ const ContextProvider = ({ children }) => {
     setFavorites(saved);
   }, []);
 
+  const normalize = (text) =>
+    text
+      .toLowerCase()
+      .replace(/[-\s]/g, "")
+      .replace(/[^a-z0-9]/g, "");
+
   const addFavorite = (name) => {
     setFavorites((prev) => {
-      if (prev.includes(name)) return prev;
+      const exists = prev.some(
+        (fav) => normalize(fav) === normalize(name)
+      );
+
+      if (exists) return prev;
 
       const updated = [...prev, name];
       localStorage.setItem("favorites", JSON.stringify(updated));
@@ -57,12 +59,14 @@ const ContextProvider = ({ children }) => {
 
   const removeFavorite = (name) => {
     setFavorites((prev) => {
-      const updated = prev.filter((fav) => fav !== name);
+      const updated = prev.filter(
+        (fav) => normalize(fav) !== normalize(name)
+      );
+
       localStorage.setItem("favorites", JSON.stringify(updated));
       return updated;
     });
   };
-
 
   const isFavorite = (name) =>
     favorites.some((fav) => normalize(fav) === normalize(name));
