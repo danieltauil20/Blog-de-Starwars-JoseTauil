@@ -2,11 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../appContext";
 
+
 export const Navbar = () => {
   const { favorites, removeFavorite } = useContext(Context);
   const navigate = useNavigate();
 
-  
+
   const formatName = (text) => {
     return text
       .replace(/([A-Z])/g, " $1")
@@ -16,12 +17,21 @@ export const Navbar = () => {
   return (
     <nav className="navbar navbar-dark bg-dark px-4">
 
-      
-      <Link to="/" className="navbar-brand text-warning fw-bold">
-        ⭐ Star Wars Blog
+
+      <Link to="/" className="navbar-brand">
+        <img
+          src="/logo.png"
+          alt="Star Wars"
+          style={{
+            height: "60px",
+            transform: "scale(2.5)",
+            transformOrigin: "left center",
+            marginTop: "10px" 
+          }}
+        />
       </Link>
 
-      
+
       <div className="dropdown">
         <button
           className="btn btn-warning dropdown-toggle"
@@ -37,11 +47,11 @@ export const Navbar = () => {
           ) : (
             favorites.map((fav) => (
               <li
-                key={fav} 
+                key={fav}
                 className="dropdown-item d-flex justify-content-between align-items-center"
               >
 
-              
+
                 <span
                   style={{ cursor: "pointer" }}
                   onClick={() => navigate(`/single/${encodeURIComponent(fav)}`)}
@@ -49,7 +59,7 @@ export const Navbar = () => {
                   {formatName(fav)}
                 </span>
 
-             
+
                 <button
                   className="btn btn-sm btn-danger ms-2"
                   onClick={() => removeFavorite(fav)}

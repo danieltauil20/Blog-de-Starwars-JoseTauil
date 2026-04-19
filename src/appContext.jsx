@@ -8,7 +8,14 @@ const ContextProvider = ({ children }) => {
   const [planets, setPlanets] = useState([]);
   const [favorites, setFavorites] = useState([]);
 
-  // 🔥 FETCH CON MEJOR CONTROL
+  
+  const normalize = (text) =>
+    text
+      .toLowerCase()
+      .replace(/[-\s]/g, "")
+      .replace(/[^a-z0-9]/g, "");
+
+  
   const fetchData = async () => {
     try {
       const [peopleRes, vehiclesRes, planetsRes] = await Promise.all([
@@ -38,28 +45,27 @@ const ContextProvider = ({ children }) => {
     setFavorites(saved);
   }, []);
 
-  // ⭐ AÑADIR FAVORITO
-const addFavorite = (name) => {
-  setFavorites((prev) => {
-    if (prev.includes(name)) return [...prev];
+  const addFavorite = (name) => {
+    setFavorites((prev) => {
+      if (prev.includes(name)) return prev;
 
-    const updated = [...prev, name];
-    localStorage.setItem("favorites", JSON.stringify(updated));
-    return updated;
-  });
-};
+      const updated = [...prev, name];
+      localStorage.setItem("favorites", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const removeFavorite = (name) => {
+    setFavorites((prev) => {
+      const updated = prev.filter((fav) => fav !== name);
+      localStorage.setItem("favorites", JSON.stringify(updated));
+      return updated;
+    });
+  };
 
 
-const removeFavorite = (name) => {
-  setFavorites((prev) => {
-    const updated = prev.filter((fav) => fav !== name);
-    localStorage.setItem("favorites", JSON.stringify(updated));
-    return updated;
-  });
-};
-
-  
-  const isFavorite = (name) => favorites.includes(name);
+  const isFavorite = (name) =>
+    favorites.some((fav) => normalize(fav) === normalize(name));
 
   return (
     <Context.Provider
@@ -70,7 +76,7 @@ const removeFavorite = (name) => {
         favorites,
         addFavorite,
         removeFavorite,
-        isFavorite, // 👈 útil para tus componentes
+        isFavorite,
       }}
     >
       {children}

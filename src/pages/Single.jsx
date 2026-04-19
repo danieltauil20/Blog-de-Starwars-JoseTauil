@@ -8,18 +8,20 @@ const Single = () => {
   const { favorites, addFavorite, removeFavorite } = useContext(Context);
 
   const decodedName = decodeURIComponent(name);
-  const isFavorite = favorites.includes(decodedName);
 
-
+ 
   const normalize = (text) =>
     text
       .toLowerCase()
-      .replace(/[-\s]/g, "") // quita espacios y guiones
-      .replace(/[^a-z0-9]/g, ""); // limpia todo lo demás
+      .replace(/[-\s]/g, "")
+      .replace(/[^a-z0-9]/g, "");
+
+  console.log(normalize(decodedName));
 
  
+  const isFavorite = favorites.includes(decodedName);
+
   const images = {
-    
     lukeskywalker: "/luke.webp",
     darthvader: "/Darth Vader.jpg",
     leiaorgana: "/Leia Organa.jpg",
@@ -28,20 +30,18 @@ const Single = () => {
     c3po: "/C-3PO.jpg",
     owenlars: "/Owen Lars.jpg",
     beruwhitesunlars: "/Beru Whitesun lars.jpg",
+    r5d4: "/R5-D4.jpg",
     biggsdarklighter: "/Biggs Darklighter.jpg",
-
-    
     sandcrawler: "/sandcrawler.jpg",
     snowspeeder: "/Snowspeeder.jpg",
-    atst: "/AT-ST.jpg",
+    atat: "/AT-AT.jpg",
+    tiebomber: "/TIE bomber.jpg",
+    tielnstarfighter: "/tielnstarfighter.jpg",
+    t16skyhopper: "/T-16 skyhopper.jpg",
+    x34landspeeder: "/X-34 landspeeder.jpg",
     sailbarge: "/Sail barge.jpg",
     stormivtwinpodcloudcar: "/Storm IV Twin-Pod cloud car.jpg",
-    t16skyhopper: "/T-16 skyhopper.jpg",
-    tiebomber: "/TIE bomber.jpg",
-    tielnstrafighter: "/TIE-LN starfighter.jpg",
-    x34landspeeder: "/X-34 landspeeder.jpg",
-
-  
+    imperialspeederbike: "/imperialspeederbike.webp",
     tatooine: "/tatooine.webp",
     naboo: "/naboo.jpg",
     hoth: "/hoth.jpg",
@@ -56,9 +56,7 @@ const Single = () => {
 
   const image = images[normalize(decodedName)] || "/default.webp";
 
-  
   const bio = {
-    // PERSONAJES
     "Luke Skywalker":
       "Un joven granjero que se convirtió en uno de los Jedi más poderosos de la galaxia.",
     "Darth Vader":
@@ -78,7 +76,6 @@ const Single = () => {
     "Biggs Darklighter":
       "Piloto rebelde y amigo de la infancia de Luke.",
 
-    
     "Sand Crawler":
       "Vehículo gigante de los Jawas usado para recolectar chatarra.",
     "Snowspeeder":
@@ -97,8 +94,9 @@ const Single = () => {
       "Caza imperial rápido y ágil.",
     "X-34 landspeeder":
       "Vehículo terrestre usado por Luke en Tatooine.",
+    "Imperial Speeder Bike":
+      "Vehículo terrestre rápido usado por los soldados Scout.",
 
-    
     "Tatooine":
       "Planeta desértico de dos soles, hogar de Luke.",
     "Naboo":
@@ -124,14 +122,12 @@ const Single = () => {
   return (
     <div className="container mt-5 starwars-bg">
 
-      
       <button className="btn btn-back mb-4" onClick={() => navigate(-1)}>
         ← Volver
       </button>
 
       <div className="row">
 
-        
         <div className="col-md-5">
           <img
             src={image}
@@ -144,7 +140,6 @@ const Single = () => {
           />
         </div>
 
-        
         <div className="col-md-7 d-flex flex-column justify-content-center">
 
           <h1 className="starwars-title">{decodedName}</h1>

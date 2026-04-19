@@ -2,7 +2,13 @@ import Card from "./Card";
 
 const Home = () => {
 
-  // ⭐ PERSONAJES
+  const normalize = (text) =>
+    text
+      .toLowerCase()
+      .replace(/[-\s]/g, "")
+      .replace(/[^a-z0-9]/g, "");
+
+  
   const personajes = [
     { name: "Luke Skywalker" },
     { name: "Darth Vader" },
@@ -11,7 +17,7 @@ const Home = () => {
     { name: "R2-D2" },
     { name: "C-3PO" },
     { name: "Owen Lars" },
-    { name: "Beru Whitesun lars" },
+    { name: "Beru Whitesun Lars" }, // 👈 corregido
     { name: "R5-D4" },
     { name: "Biggs Darklighter" },
   ];
@@ -29,7 +35,7 @@ const Home = () => {
     biggsdarklighter: "/Biggs Darklighter.jpg",
   };
 
-  
+ 
   const vehiculos = [
     { name: "Sand Crawler" },
     { name: "Snowspeeder" },
@@ -46,13 +52,12 @@ const Home = () => {
     snowspeeder: "/Snowspeeder.jpg",
     atat: "/AT-AT.jpg",
     tiebomber: "/TIE bomber.jpg",
-    tielnstarfighter: "/TIE-LN starfighter.jpg",
+    tielnstarfighter: "/tielnstrafighter.jpg",
     t16skyhopper: "/T-16 skyhopper.jpg",
     x34landspeeder: "/X-34 landspeeder.jpg",
-    imperialspeederbike: "/speeder.jpg",
+    imperialspeederbike: "/imperialspeederbike.webp",
   };
 
-  
   const planetas = [
     { name: "Tatooine" },
     { name: "Naboo" },
@@ -80,7 +85,6 @@ const Home = () => {
   return (
     <div className="container mt-4">
 
-      
       <h2 className="text-warning mb-3">Personajes</h2>
       <div className="d-flex overflow-auto pb-3">
         {personajes.map((item, index) => (
@@ -88,7 +92,6 @@ const Home = () => {
         ))}
       </div>
 
-      
       <h2 className="text-warning mb-3">Vehículos</h2>
       <div className="d-flex overflow-auto pb-3">
         {vehiculos.map((item, index) => (
@@ -96,7 +99,6 @@ const Home = () => {
         ))}
       </div>
 
-      
       <h2 className="text-warning mb-3">Planetas</h2>
       <div className="d-flex overflow-auto pb-3">
         {planetas.map((item, index) => (

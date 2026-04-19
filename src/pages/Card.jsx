@@ -30,7 +30,7 @@ const Card = ({ item, imageMap }) => {
         navigate(`/single/${encodeURIComponent(item.name)}`) // 👈 ORIGINAL
       }
     >
-      {/* 🖼️ IMAGEN */}
+      
       <img
         src={image}
         className="card-img-top"
