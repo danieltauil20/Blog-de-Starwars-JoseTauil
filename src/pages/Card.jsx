@@ -2,17 +2,15 @@ import { useContext } from "react";
 import { Context } from "../appContext";
 import { useNavigate } from "react-router-dom";
 
-const Card = ({ item, imageMap }) => {
+const Card = ({ item, imageMap, type }) => {
   const { favorites, addFavorite, removeFavorite } = useContext(Context);
   const navigate = useNavigate();
 
- 
   const normalize = (text) =>
     text.toLowerCase().replace(/[^a-z0-9]/g, "");
 
   const normalizedName = normalize(item.name);
 
-  
   const isFavorite = favorites.includes(item.name);
 
   const image = imageMap[normalizedName] || "/default.webp";
@@ -27,10 +25,9 @@ const Card = ({ item, imageMap }) => {
         cursor: "pointer",
       }}
       onClick={() =>
-        navigate(`/single/${encodeURIComponent(item.name)}`) // 👈 ORIGINAL
+        navigate(`/single/${type}/${item.uid}`)
       }
     >
-      
       <img
         src={image}
         className="card-img-top"
@@ -38,20 +35,18 @@ const Card = ({ item, imageMap }) => {
         alt={item.name}
       />
 
-      
       <div className="card-body d-flex flex-column justify-content-between">
         <h6 className="text-center">{item.name}</h6>
 
-        
         <button
           className="btn btn-light w-100"
           onClick={(e) => {
             e.stopPropagation();
 
             if (isFavorite) {
-              removeFavorite(item.name); // 👈 ORIGINAL
+              removeFavorite(item.name);
             } else {
-              addFavorite(item.name); // 👈 ORIGINAL
+              addFavorite(item.name);
             }
           }}
         >

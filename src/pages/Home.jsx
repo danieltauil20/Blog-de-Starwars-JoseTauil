@@ -1,26 +1,16 @@
+import { useContext } from "react";
+import { Context } from "../appContext";
 import Card from "./Card";
 
 const Home = () => {
+
+  const { people, vehicles, planets } = useContext(Context);
 
   const normalize = (text) =>
     text
       .toLowerCase()
       .replace(/[-\s]/g, "")
       .replace(/[^a-z0-9]/g, "");
-
-  
-  const personajes = [
-    { name: "Luke Skywalker" },
-    { name: "Darth Vader" },
-    { name: "Leia Organa" },
-    { name: "Obi-Wan Kenobi" },
-    { name: "R2-D2" },
-    { name: "C-3PO" },
-    { name: "Owen Lars" },
-    { name: "Beru Whitesun Lars" }, // 👈 corregido
-    { name: "R5-D4" },
-    { name: "Biggs Darklighter" },
-  ];
 
   const personajesImages = {
     lukeskywalker: "/luke.webp",
@@ -35,40 +25,19 @@ const Home = () => {
     biggsdarklighter: "/Biggs Darklighter.jpg",
   };
 
- 
-  const vehiculos = [
-    { name: "Sand Crawler" },
-    { name: "Snowspeeder" },
-    { name: "AT-AT" },
-    { name: "TIE bomber" },
-    { name: "TIE-LN starfighter" },
-    { name: "T-16 skyhopper" },
-    { name: "X-34 landspeeder" },
-    { name: "Imperial Speeder Bike" },
-  ];
-
   const vehiculosImages = {
     sandcrawler: "/sandcrawler.jpg",
     snowspeeder: "/Snowspeeder.jpg",
     atat: "/AT-AT.jpg",
+    atst: "/atst.jpg",
+    stormivtwinpodcloudcar: "/stormivtwinpodcloudcar.jpg",
+    sailbarge: "/sailbarge.jpg",
     tiebomber: "/TIE bomber.jpg",
     tielnstarfighter: "/tielnstrafighter.jpg",
     t16skyhopper: "/T-16 skyhopper.jpg",
     x34landspeeder: "/X-34 landspeeder.jpg",
     imperialspeederbike: "/imperialspeederbike.webp",
   };
-
-  const planetas = [
-    { name: "Tatooine" },
-    { name: "Naboo" },
-    { name: "Hoth" },
-    { name: "Coruscant" },
-    { name: "Dagobah" },
-    { name: "Endor" },
-    { name: "Kamino" },
-    { name: "Bespin" },
-    { name: "Alderaan" },
-  ];
 
   const planetasImages = {
     tatooine: "/tatooine.webp",
@@ -80,6 +49,7 @@ const Home = () => {
     kamino: "/kamino.jpg",
     bespin: "/bespin.jpg",
     alderaan: "/alderaan.jpg",
+    yaviniv: "/yaviniv.jpg",
   };
 
   return (
@@ -87,22 +57,37 @@ const Home = () => {
 
       <h2 className="text-warning mb-3">Personajes</h2>
       <div className="d-flex overflow-auto pb-3">
-        {personajes.map((item, index) => (
-          <Card key={index} item={item} imageMap={personajesImages} />
+        {people.map((item) => (
+          <Card
+            key={item.uid}
+            item={item}
+            imageMap={personajesImages}
+            type="people"
+          />
         ))}
       </div>
 
       <h2 className="text-warning mb-3">Vehículos</h2>
       <div className="d-flex overflow-auto pb-3">
-        {vehiculos.map((item, index) => (
-          <Card key={index} item={item} imageMap={vehiculosImages} />
+        {vehicles.map((item) => (
+          <Card
+            key={item.uid}
+            item={item}
+            imageMap={vehiculosImages}
+            type="vehicles"
+          />
         ))}
       </div>
 
       <h2 className="text-warning mb-3">Planetas</h2>
       <div className="d-flex overflow-auto pb-3">
-        {planetas.map((item, index) => (
-          <Card key={index} item={item} imageMap={planetasImages} />
+        {planets.map((item) => (
+          <Card
+            key={item.uid}
+            item={item}
+            imageMap={planetasImages}
+             type="planets"
+          />
         ))}
       </div>
 

@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import Single from "../pages/Single";
 import { Navbar } from "./Navbar";
 
+
 const Layout = () => {
   return (
     <>
@@ -10,7 +11,7 @@ const Layout = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/single/:name" element={<Single />} />
+        <Route path="/single/:type/:uid" element={<Single />} />
       </Routes>
     </>
   );

@@ -1,27 +1,32 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { Context } from "../appContext";
+import { useEffect, useState } from "react";
 
 const Single = () => {
-  const { name } = useParams();
+  const { uid, type } = useParams();
   const navigate = useNavigate();
-  const { favorites, addFavorite, removeFavorite } = useContext(Context);
+  const [details, setDetails] = useState(null);
 
-  const decodedName = decodeURIComponent(name);
+  useEffect(() => {
+    fetch(`https://www.swapi.tech/api/${type}/${uid}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setDetails(data.result);
+      })
+      .catch((err) => console.error(err));
+  }, [uid, type]);
 
- 
+
+  if (!details) {
+    return (
+      <div className="text-center mt-5">
+        <div className="spinner-border text-warning"></div>
+        <p className="starwars-title mt-3">Cargando...</p>
+      </div>
+    );
+  }
+
   const normalize = (text) =>
-    text
-      .toLowerCase()
-      .replace(/[-\s]/g, "")
-      .replace(/[^a-z0-9]/g, "");
-
-  console.log(normalize(decodedName));
-
- 
-  const isFavorite = favorites.some(
-  (fav) => normalize(fav) === normalize(decodedName)
-);
+    text.toLowerCase().replace(/[^a-z0-9]/g, "");
 
   const images = {
     lukeskywalker: "/luke.webp",
@@ -32,17 +37,19 @@ const Single = () => {
     c3po: "/C-3PO.jpg",
     owenlars: "/Owen Lars.jpg",
     beruwhitesunlars: "/Beru Whitesun lars.jpg",
-    r5d4: "/R5-D4.jpg",
+    r5d4: "/r5d4.jpg",
     biggsdarklighter: "/Biggs Darklighter.jpg",
     sandcrawler: "/sandcrawler.jpg",
     snowspeeder: "/Snowspeeder.jpg",
     atat: "/AT-AT.jpg",
+    atst: "/atst.jpg",
+    stormivtwinpodcloudcar: "/stormivtwinpodcloudcar.jpg",
+    sailbarge: "/sailbarge.jpg",
     tiebomber: "/TIE bomber.jpg",
     tielnstarfighter: "/tielnstarfighter.jpg",
     t16skyhopper: "/T-16 skyhopper.jpg",
+    tielnstarfighter: "/tielnstrafighter.jpg",
     x34landspeeder: "/X-34 landspeeder.jpg",
-    sailbarge: "/Sail barge.jpg",
-    stormivtwinpodcloudcar: "/Storm IV Twin-Pod cloud car.jpg",
     imperialspeederbike: "/imperialspeederbike.webp",
     tatooine: "/tatooine.webp",
     naboo: "/naboo.jpg",
@@ -52,74 +59,12 @@ const Single = () => {
     endor: "/endor.jpg",
     bespin: "/bespin.jpg",
     kamino: "/kamino.jpg",
-    yaviniv: "/yaviniv.jpg",
     alderaan: "/alderaan.jpg",
+    yaviniv: "/yaviniv.jpg",
   };
 
-  const image = images[normalize(decodedName)] || "/default.webp";
-
-  const bio = {
-    "Luke Skywalker":
-      "Un joven granjero que se convirtió en uno de los Jedi más poderosos de la galaxia.",
-    "Darth Vader":
-      "Antiguo Jedi que cayó al lado oscuro y sirvió al Emperador.",
-    "Leia Organa":
-      "Princesa y líder rebelde clave en la lucha contra el Imperio.",
-    "Obi-Wan Kenobi":
-      "Maestro Jedi sabio y mentor de Anakin y Luke.",
-    "R2-D2":
-      "Droide valiente que ha salvado la galaxia en múltiples ocasiones.",
-    "C-3PO":
-      "Droide de protocolo experto en comunicación.",
-    "Owen Lars":
-      "Granjero de Tatooine y tío adoptivo de Luke.",
-    "Beru Whitesun Lars":
-      "Tía de Luke, amable y protectora.",
-    "Biggs Darklighter":
-      "Piloto rebelde y amigo de la infancia de Luke.",
-
-    "Sand Crawler":
-      "Vehículo gigante de los Jawas usado para recolectar chatarra.",
-    "Snowspeeder":
-      "Vehículo rebelde usado en climas extremos como Hoth.",
-    "AT-ST":
-      "Caminante imperial ligero usado en combate terrestre.",
-    "Sail barge":
-      "Nave de transporte de Jabba el Hutt.",
-    "Storm IV Twin-Pod cloud car":
-      "Vehículo de patrulla aérea en Bespin.",
-    "T-16 skyhopper":
-      "Vehículo aéreo usado para entrenamiento en Tatooine.",
-    "TIE bomber":
-      "Nave imperial diseñada para bombardeos.",
-    "TIE-LN starfighter":
-      "Caza imperial rápido y ágil.",
-    "X-34 landspeeder":
-      "Vehículo terrestre usado por Luke en Tatooine.",
-    "Imperial Speeder Bike":
-      "Vehículo terrestre rápido usado por los soldados Scout.",
-
-    "Tatooine":
-      "Planeta desértico de dos soles, hogar de Luke.",
-    "Naboo":
-      "Planeta pacífico con paisajes hermosos.",
-    "Hoth":
-      "Planeta helado donde la Rebelión tuvo una base.",
-    "Coruscant":
-      "Centro político de la galaxia.",
-    "Dagobah":
-      "Planeta pantanoso donde Yoda vivió.",
-    "Endor":
-      "Hogar de los Ewoks.",
-    "Bespin":
-      "Planeta gaseoso donde se encuentra Ciudad Nube.",
-    "Kamino":
-      "Planeta oceánico donde se creó el ejército clon.",
-    "Yavin IV":
-      "Base rebelde ubicada en una luna selvática.",
-    "Alderaan":
-      "Planeta natal de Leia destruido por la Estrella de la Muerte.",
-  };
+  const image =
+    images[normalize(details.properties.name)] || "/default.webp";
 
   return (
     <div className="container mt-5 starwars-bg">
@@ -128,48 +73,59 @@ const Single = () => {
         ← Volver
       </button>
 
-      <div className="row">
+      <div className="row align-items-center">
 
-        <div className="col-md-5">
+
+        <div className="col-md-5 text-center">
           <img
             src={image}
-            alt={decodedName}
+            alt={details.properties.name}
             className="img-fluid starwars-img"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/default.webp";
-            }}
           />
         </div>
 
-        <div className="col-md-7 d-flex flex-column justify-content-center">
 
-          <h1 className="starwars-title">{decodedName}</h1>
+        <div className="col-md-7">
 
-          <button
-            className="btn btn-starwars mb-3"
-            onClick={() =>
-              isFavorite
-                ? removeFavorite(decodedName)
-                : addFavorite(decodedName)
-            }
-          >
-            {isFavorite ? "★ Quitar de favoritos" : "☆ Añadir a favoritos"}
-          </button>
+          <h1 className="starwars-title">
+            {details.properties.name}
+          </h1>
 
-          <p className="starwars-text">
-            {bio[decodedName] ||
-              "Este elemento forma parte del universo de Star Wars."}
-          </p>
+          <div className="starwars-text">
 
-          <hr />
+            {type === "people" && (
+              <>
+                <p>Altura: {details.properties.height}</p>
+                <p>Peso: {details.properties.mass}</p>
+                <p>Género: {details.properties.gender}</p>
+                <p>Color de ojos: {details.properties.eye_color}</p>
+                <p>Año de nacimiento: {details.properties.birth_year}</p>
+              </>
+            )}
 
-          <h5 className="starwars-title">Detalles</h5>
-          <p className="starwars-text">
-            Este personaje, planeta o vehículo ha tenido un impacto importante en la galaxia.
-          </p>
+            {type === "vehicles" && (
+              <>
+                <p>Modelo: {details.properties.model}</p>
+                <p>Fabricante: {details.properties.manufacturer}</p>
+                <p>Clase: {details.properties.vehicle_class}</p>
+                <p>Velocidad: {details.properties.max_atmosphering_speed}</p>
+                <p>Tripulación: {details.properties.crew}</p>
+              </>
+            )}
 
+            {type === "planets" && (
+              <>
+                <p>Clima: {details.properties.climate}</p>
+                <p>Población: {details.properties.population}</p>
+                <p>Terreno: {details.properties.terrain}</p>
+                <p>Gravedad: {details.properties.gravity}</p>
+                <p>Diámetro: {details.properties.diameter}</p>
+              </>
+            )}
+
+          </div>
         </div>
+
       </div>
     </div>
   );
